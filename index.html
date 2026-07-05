@@ -429,7 +429,7 @@
 // =============================================
 //  API — Netlify Function Proxy
 // =============================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbz-aANY8Xhddbp-Ft4eH-Qz9n98aUEdXsmOIlkSukZ7ulGQI1s09Zg9FHunUqdslNI/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzU2xbmXiE-aXmPE77u9xUkBB_VOXQ18h2xeXKytmnxyiuBzJl-iTmm_Q83z5bqYQ/exec';
 
 // =============================================
 //  STATE
@@ -736,25 +736,21 @@ function updateSteps(current) {
 }
 
 // =============================================
-//  ImgBB UPLOAD
+//  رفع الملفات على Google Drive (عبر Apps Script)
 // =============================================
-const IMGBB_API_KEY = '0b752241c19734aee95ca664ea594c4e';
-
-async function uploadToImgBB(file) {
+async function uploadToDrive(file) {
   const base64 = await toBase64(file);
-  const formData = new FormData();
-  formData.append('key', IMGBB_API_KEY);
-  formData.append('image', base64);
-  formData.append('name', file.name.replace(/\.[^.]+$/, '') + '_' + Date.now());
+  const fileName = file.name.replace(/\.[^.]+$/, '') + '_' + Date.now() + (file.name.match(/\.[^.]+$/)?.[0] || '');
 
-  const resp = await fetch('https://api.imgbb.com/1/upload', {
-    method: 'POST',
-    body: formData,
+  const resp = await api('uploadFile', {
+    fileData  : base64,
+    fileName  : fileName,
+    nationalId: state.nationalId,
+    nameAr    : state.studentData?.name_ar || '',
   });
-  if (!resp.ok) throw new Error('فشل الاتصال بخدمة ImgBB (HTTP ' + resp.status + ')');
-  const json = await resp.json();
-  if (!json.success) throw new Error('فشل رفع الصورة على ImgBB: ' + (json.error?.message || 'خطأ غير معروف'));
-  return json.data.url; // رابط مباشر للصورة
+
+  if (!resp.success) throw new Error('فشل رفع الملف على : ' + (resp.error || 'خطأ غير معروف'));
+  return resp.url; // رابط الملف على Google Drive
 }
 
 async function submitRequest() {
@@ -770,14 +766,14 @@ async function submitRequest() {
       throw new Error('صورة الإيصال غير موجودة — يرجى العودة وإعادة رفع الملف');
     }
 
-    // ✅ رفع الصور على ImgBB أولاً ثم إرسال الروابط فقط للسيرفر
-    showLoading('جاري رفع صورة الإيصال على ImgBB...');
-    const receiptUrl = await uploadToImgBB(receiptFile);
+    // ✅ رفع الصور على Google Drive أولاً ثم إرسال الروابط فقط للسيرفر
+    showLoading('جاري رفع صورة الإيصال  ...');
+    const receiptUrl = await uploadToDrive(receiptFile);
 
     let translatedUrl = '';
     if (translatedFile) {
-      showLoading('جاري رفع صورة الشهادة المترجمة على ImgBB...');
-      translatedUrl = await uploadToImgBB(translatedFile);
+      showLoading('جاري رفع صورة الشهادة المترجمة على Google Drive...');
+      translatedUrl = await uploadToDrive(translatedFile);
     }
 
     showLoading('جاري إرسال الطلب...');
@@ -787,8 +783,8 @@ async function submitRequest() {
       requestType       : state.selectedRequestType,
       receiptNo         : document.getElementById('req_receipt_no').value.trim(),
       count             : document.getElementById('req_count').value,
-      receiptUrl        : receiptUrl,       // ✅ رابط ImgBB بدل base64
-      translatedUrl     : translatedUrl,    // ✅ رابط ImgBB بدل base64
+      receiptUrl        : receiptUrl,       // ✅ رابط Google Drive بدل base64
+      translatedUrl     : translatedUrl,    // ✅ رابط Google Drive بدل base64
       submittedAt       : new Date().toLocaleString('ar-EG'),
     };
 
