@@ -152,6 +152,38 @@
   .wf-card p{font-size:.8rem;color:var(--text-muted);}
   .wf-card h4{font-size:.9rem;font-weight:700;color:var(--text);}
 
+  /* ============ CHOICE SCREEN (بعد التعرّف على الطالب) ============ */
+  .choice-screen{text-align:center;padding:20px 0 10px;}
+  .choice-welcome-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:#1a7a4a;padding:7px 16px;border-radius:20px;font-size:.82rem;font-weight:700;margin-bottom:18px;}
+  .choice-welcome-badge .dot{width:7px;height:7px;border-radius:50%;background:#2ecc71;animation:pulse 2s infinite;}
+  .choice-header{margin-bottom:36px;}
+  .choice-header .ch-icon{font-size:56px;margin-bottom:14px;filter:drop-shadow(0 6px 14px rgba(10,61,107,.15));}
+  .choice-header h2{font-size:1.7rem;font-weight:900;color:var(--primary);margin-bottom:8px;}
+  .choice-header p{color:var(--text-muted);font-size:.92rem;}
+  .choice-header p strong{color:var(--primary);}
+  .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:780px;margin:0 auto;}
+  .choice-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:34px 26px;cursor:pointer;position:relative;overflow:hidden;text-align:center;transition:all .35s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow);}
+  .choice-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;z-index:0;}
+  .choice-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent;}
+  .choice-card:hover::before{opacity:1;}
+  .choice-card.cc-request::before{background:linear-gradient(150deg,var(--primary) 0%,var(--primary-light) 60%,var(--accent) 130%);}
+  .choice-card.cc-edit::before{background:linear-gradient(150deg,#3a4a5e 0%,#5a6a7e 100%);}
+  .choice-card > *{position:relative;z-index:1;}
+  .choice-card .cc-icon-wrap{width:66px;height:66px;margin:0 auto 18px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--surface);transition:all .35s;}
+  .choice-card.cc-request .cc-icon-wrap{background:rgba(10,61,107,.08);}
+  .choice-card.cc-edit .cc-icon-wrap{background:rgba(90,106,126,.1);}
+  .choice-card:hover .cc-icon-wrap{background:rgba(255,255,255,.18);transform:scale(1.08) rotate(-4deg);}
+  .choice-card .cc-title{font-size:1.12rem;font-weight:900;color:var(--text);margin-bottom:8px;transition:color .35s;}
+  .choice-card:hover .cc-title{color:#fff;}
+  .choice-card .cc-desc{font-size:.83rem;color:var(--text-muted);line-height:1.6;margin-bottom:20px;transition:color .35s;}
+  .choice-card:hover .cc-desc{color:rgba(255,255,255,.85);}
+  .choice-card .cc-cta{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--primary);transition:color .35s;}
+  .choice-card.cc-edit .cc-cta{color:#5a6a7e;}
+  .choice-card:hover .cc-cta{color:#fff;}
+  .choice-card .cc-arrow{transition:transform .35s;}
+  .choice-card:hover .cc-arrow{transform:translateX(-4px);}
+  @media(max-width:640px){.choice-grid{grid-template-columns:1fr;}}
+
   .lookup-bar{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid var(--border);border-radius:12px;padding:8px 8px 8px 16px;margin-bottom:24px;transition:all .3s;}
   .lookup-bar:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,180,216,.12);}
   .lookup-bar input{flex:1;border:none;outline:none;font-family:'Cairo',sans-serif;font-size:1rem;color:var(--text);background:transparent;direction:ltr;letter-spacing:2px;}
@@ -230,11 +262,40 @@
       </div>
     </div>
 
+    <!-- ✅ شاشة الاختيار — تظهر للطالب اللي بياناته موجودة بالفعل -->
+    <div id="section-choice" style="display:none;">
+      <div class="choice-screen">
+        <div class="choice-welcome-badge"><span class="dot"></span> بياناتك محفوظة لدينا</div>
+        <div class="choice-header">
+          <div class="ch-icon">👋</div>
+          <h2>أهلاً بعودتك، <span id="choiceName">—</span></h2>
+          <p>بياناتك الشخصية <strong>محفوظة ومكتملة</strong> — اختر ما تريد القيام به الآن</p>
+        </div>
+        <div class="choice-grid">
+          <div class="choice-card cc-request" onclick="goToRequestFromChoice()">
+            <div class="cc-icon-wrap">🎓</div>
+            <div class="cc-title">طلب شهادة جديدة</div>
+            <div class="cc-desc">استخرج شهادة التخرج، بيان الدرجات، أو أي إفادة رسمية خلال دقائق</div>
+            <div class="cc-cta">ابدأ الطلب الآن <span class="cc-arrow">←</span></div>
+          </div>
+          <div class="choice-card cc-edit" onclick="goToEditFromChoice()">
+            <div class="cc-icon-wrap">✏️</div>
+            <div class="cc-title">تعديل بياناتي الشخصية</div>
+            <div class="cc-desc">راجع بياناتك المسجّلة وحدّث أي معلومة تغيّرت مثل رقم الهاتف أو العنوان</div>
+            <div class="cc-cta">عرض وتعديل البيانات <span class="cc-arrow">←</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="section-profile" style="display:none;">
       <div class="profile-header">
         <div class="profile-avatar">👤</div>
         <div class="profile-info"><h3 id="profileName">—</h3><p id="profileDept">—</p></div>
         <div class="profile-status"><div class="status-dot"></div><span>ملف نشط</span></div>
+      </div>
+      <div style="margin-bottom:16px;" id="backToChoiceWrap">
+        <button class="btn btn-sm btn-outline" onclick="backToChoice()">→ رجوع للخيارات</button>
       </div>
       <div class="card">
         <div class="card-title">
@@ -439,6 +500,7 @@ let state = {
   studentData: null,
   isEditing: false,
   selectedRequestType: '',
+  cameFromChoice: false,   // ✅ هل الطالب مر بشاشة الاختيار (يعني بياناته كانت موجودة مسبقاً)
 };
 
 // =============================================
@@ -528,11 +590,11 @@ async function lookupStudent() {
     hideLoading();
     if (resp.found) {
       state.studentData = resp.data;
-      showToast('تم العثور على بياناتك ✅', 'success');
-      showProfileForm(resp.data);
+      showChoiceScreen(resp.data);
     } else {
       state.studentData = null;
-      showToast('لم يتم العثور على بيانات — يرجى إدخال بياناتك', 'info');
+      state.cameFromChoice = false;
+      showToast('لم يتم العثور على بيانات — يرجى إدخال بياناتك لأول مرة', 'info');
       showProfileForm({ national_id: id });
       toggleEdit(true);
     }
@@ -540,6 +602,35 @@ async function lookupStudent() {
     hideLoading();
     showToast('خطأ في الاتصال: ' + e.message, 'error');
   }
+}
+
+// =============================================
+//  CHOICE SCREEN
+// =============================================
+function showChoiceScreen(data) {
+  document.getElementById('section-lookup').style.display  = 'none';
+  document.getElementById('section-profile').style.display = 'none';
+  document.getElementById('section-choice').style.display  = 'block';
+  document.getElementById('choiceName').textContent = data.name_ar || 'صديقنا الخريج';
+  state.cameFromChoice = true;
+}
+
+function goToRequestFromChoice() {
+  document.getElementById('section-choice').style.display = 'none';
+  switchTab('requests');
+}
+
+function goToEditFromChoice() {
+  document.getElementById('section-choice').style.display = 'none';
+  state.isEditing = false;
+  showProfileForm(state.studentData);
+  document.getElementById('backToChoiceWrap').style.display = 'block';
+}
+
+function backToChoice() {
+  cancelEdit();
+  document.getElementById('section-profile').style.display = 'none';
+  showChoiceScreen(state.studentData || { national_id: state.nationalId });
 }
 
 // =============================================
@@ -564,6 +655,7 @@ function showProfileForm(data) {
     ? 'قسم ' + data.department : 'بيانات غير مكتملة';
   document.getElementById('badgeName').textContent   = data.name_ar || state.nationalId;
   document.getElementById('studentBadge').style.display = 'block';
+  document.getElementById('backToChoiceWrap').style.display = state.cameFromChoice ? 'block' : 'none';
   setFormReadonly(!state.isEditing);
 }
 
@@ -632,8 +724,18 @@ async function confirmSave() {
       document.getElementById('profileName').textContent = data.nameAr;
       document.getElementById('profileDept').textContent = 'قسم ' + data.department;
       document.getElementById('badgeName').textContent   = data.nameAr;
-      showToast('تم حفظ البيانات بنجاح ✅', 'success');
-      cancelEdit();
+
+      if (state.cameFromChoice) {
+        // ✅ كان يعدّل بيانات موجودة مسبقاً — نرجّعه لشاشة الاختيار الأنيقة
+        showToast('تم حفظ التعديلات بنجاح ✅', 'success');
+        cancelEdit();
+        setTimeout(() => backToChoice(), 900);
+      } else {
+        // ✅ أول مرة يسجّل بياناته — نوديه مباشرة لطلب الشهادة
+        showToast('تم حفظ بياناتك بنجاح ✅ جاري تحويلك لطلب الشهادة...', 'success', 3500);
+        cancelEdit();
+        setTimeout(() => switchTab('requests'), 1400);
+      }
     } else {
       showToast('فشل الحفظ: ' + (resp.error || 'خطأ غير معروف'), 'error');
     }
