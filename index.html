@@ -894,29 +894,46 @@ async function submitRequest() {
       translatedUrl = await waitForUpload('translatedCertFile');
     }
 
-    const payload = {
-      nationalId        : state.nationalId,
-      nameAr            : state.studentData?.name_ar || '',
-      requestType       : state.selectedRequestType,
-      receiptNo         : document.getElementById('req_receipt_no').value.trim(),
-      count             : document.getElementById('req_count').value,
-      receiptUrl        : receiptUrl,       // ✅ قد تكون فارغة إن لم تُرفع صورة أو تأخر الرفع
-      translatedUrl     : translatedUrl,    // ✅ قد تكون فارغة إن لم تُرفع صورة أو تأخر الرفع
-      submittedAt       : new Date().toLocaleString('ar-EG'),
+    const basePayload = {
+      nationalId  : state.nationalId,
+      nameAr      : state.studentData?.name_ar || '',
+      requestType : state.selectedRequestType,
+      receiptNo   : document.getElementById('req_receipt_no').value.trim(),
+      count       : document.getElementById('req_count').value,
+      submittedAt : new Date().toLocaleString('ar-EG'),
     };
 
-    const resp = await api('submitRequest', payload);
-    hideLoading();
-    if (resp.success) {
-      showToast('تم إرسال الطلب بنجاح! رقم الطلب: ' + resp.requestNumber + ' ✅', 'success', 8000);
-      resetRequestForm();
-      setTimeout(() => switchTab('history'), 1500);
-    } else {
-      showToast('فشل الإرسال: ' + (resp.error || 'خطأ غير معروف'), 'error');
+    // ✅ نضيف روابط الصور فقط إن كانت موجودة فعلاً — أبداً لا نرسل رابط فارغ للسيرفر
+    const buildPayload = (withImages) => {
+      const p = { ...basePayload };
+      if (withImages && receiptUrl)    p.receiptUrl    = receiptUrl;
+      if (withImages && translatedUrl) p.translatedUrl = translatedUrl;
+      return p;
+    };
+
+    const attemptSubmit = async (withImages) => {
+      const r = await api('submitRequest', buildPayload(withImages));
+      if (!r.success) throw new Error(r.error || 'خطأ غير معروف');
+      return r;
+    };
+
+    const hasImages = !!(receiptUrl || translatedUrl);
+    let resp;
+    try {
+      resp = await attemptSubmit(true);
+    } catch (e1) {
+      // ✅ أي خطأ متعلق برفع/رابط الصورة لا يوقف تسجيل الطلب أبداً — إعادة محاولة صامتة وتلقائية بدون صور
+      if (!hasImages) throw e1;
+      resp = await attemptSubmit(false);
     }
+
+    hideLoading();
+    showToast('تم إرسال الطلب بنجاح! رقم الطلب: ' + resp.requestNumber + ' ✅', 'success', 8000);
+    resetRequestForm();
+    setTimeout(() => switchTab('history'), 1500);
   } catch(e) {
     hideLoading();
-    showToast('خطأ أثناء الإرسال: ' + e.message, 'error');
+    showToast('فشل الإرسال: ' + (e.message || 'خطأ غير معروف'), 'error');
   } finally {
     btn.disabled = false;
     btn.innerHTML = '📤 إرسال الطلب';
