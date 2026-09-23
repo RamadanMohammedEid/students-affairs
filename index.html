@@ -392,7 +392,7 @@
 
           <!-- ✅ إصلاح: file preview يستخدم span.fp-name بدل span:nth-child(2) -->
           <div class="form-group" style="margin-top:16px;">
-            <label>صورة الإيصال المدفوع <span class="req">*</span></label>
+            <label>صورة الإيصال المدفوع</label>
             <div class="file-upload-area" id="receiptUploadArea">
               <div class="upload-icon">🧾</div>
               <p>اسحب وأفلت هنا أو <strong>اضغط للاختيار</strong></p>
@@ -409,7 +409,7 @@
           </div>
 
           <div class="form-group" id="translatedCertGroup" style="margin-top:16px;display:none;">
-            <label>صورة الشهادة المترجمة <span class="req">*</span></label>
+            <label>صورة الشهادة المترجمة</label>
             <div class="file-upload-area" id="translatedUploadArea">
               <div class="upload-icon">📋</div>
               <p>اسحب وأفلت هنا أو <strong>اضغط للاختيار</strong></p>
@@ -501,6 +501,7 @@ let state = {
   isEditing: false,
   selectedRequestType: '',
   cameFromChoice: false,   // ✅ هل الطالب مر بشاشة الاختيار (يعني بياناته كانت موجودة مسبقاً)
+  uploads: {},             // ✅ تتبع رفع الصور في الخلفية: { [inputId]: {status,url,promise} }
 };
 
 // =============================================
@@ -801,15 +802,9 @@ function backToStep1() {
 function goToStep3() {
   const receiptNo = document.getElementById('req_receipt_no').value.trim();
   const count     = document.getElementById('req_count').value;
-  const receipt   = document.getElementById('receiptFile').files[0];
   if (!receiptNo) { showToast('أدخل رقم الإيصال', 'error'); return; }
   if (!count || count < 1) { showToast('أدخل عدد النسخ', 'error'); return; }
-  if (!receipt)   { showToast('يرجى رفع صورة الإيصال', 'error'); return; }
-  if (state.selectedRequestType === 'شهادة تخرج إنجليزي' &&
-      !document.getElementById('translatedCertFile').files[0]) {
-    showToast('يرجى رفع صورة الشهادة المترجمة', 'error');
-    return;
-  }
+  // ✅ رفع الصورة اختياري بالكامل — لا يوجد تحقق إلزامي من وجود ملف
   document.getElementById('review_type').textContent    = state.selectedRequestType;
   document.getElementById('review_receipt').textContent = receiptNo;
   document.getElementById('review_count').textContent   = count + ' نسخة';
@@ -855,38 +850,58 @@ async function uploadToDrive(file) {
   return resp.url; // رابط الملف على Google Drive
 }
 
+// ✅ الحد الأقصى للانتظار الصامت لرفع الصورة قبل المتابعة بدون صورة
+const UPLOAD_GRACE_MS = 6000;
+
+// يبدأ رفع الملف في الخلفية فور اختياره — بدون أي انتظار من المستخدم
+function startBackgroundUpload(file, key) {
+  const entry = { status: 'uploading', url: '' };
+  entry.promise = uploadToDrive(file)
+    .then(url => { entry.status = 'done'; entry.url = url || ''; return entry.url; })
+    .catch(() => { entry.status = 'failed'; entry.url = ''; return ''; });
+  state.uploads[key] = entry;
+}
+
+// يحاول الحصول على رابط الصورة المرفوعة، وإن تأخر الرفع يكمل بدون صورة تلقائياً وبصمت
+function waitForUpload(key, maxWaitMs = UPLOAD_GRACE_MS) {
+  const entry = state.uploads[key];
+  if (!entry) return Promise.resolve('');           // لم يتم اختيار ملف أصلاً
+  if (entry.status === 'done')   return Promise.resolve(entry.url);
+  if (entry.status === 'failed') return Promise.resolve('');
+  return new Promise(resolve => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (!settled) { settled = true; resolve(''); }   // تأخر الرفع → نكمل بدون صورة بصمت
+    }, maxWaitMs);
+    entry.promise.then(url => {
+      if (!settled) { settled = true; clearTimeout(timer); resolve(url || ''); }
+    }).catch(() => {
+      if (!settled) { settled = true; clearTimeout(timer); resolve(''); }
+    });
+  });
+}
+
 async function submitRequest() {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> جاري الإرسال...';
-  showLoading('جاري رفع الصور...');
+  showLoading('جاري إرسال الطلب...');
   try {
-    const receiptFile    = document.getElementById('receiptFile').files[0];
-    const translatedFile = document.getElementById('translatedCertFile').files[0];
-
-    if (!receiptFile) {
-      throw new Error('صورة الإيصال غير موجودة — يرجى العودة وإعادة رفع الملف');
-    }
-
-    // ✅ رفع الصور على Google Drive أولاً ثم إرسال الروابط فقط للسيرفر
-    showLoading('جاري رفع صورة الإيصال  ...');
-    const receiptUrl = await uploadToDrive(receiptFile);
-
+    // ✅ الصور رُفعت بالفعل في الخلفية منذ اختيارها؛ هنا فقط ننتظرها بحد أقصى قصير
+    const receiptUrl = await waitForUpload('receiptFile');
     let translatedUrl = '';
-    if (translatedFile) {
-      showLoading('جاري رفع صورة الشهادة المترجمة على Google Drive...');
-      translatedUrl = await uploadToDrive(translatedFile);
+    if (state.selectedRequestType === 'شهادة تخرج إنجليزي') {
+      translatedUrl = await waitForUpload('translatedCertFile');
     }
 
-    showLoading('جاري إرسال الطلب...');
     const payload = {
       nationalId        : state.nationalId,
       nameAr            : state.studentData?.name_ar || '',
       requestType       : state.selectedRequestType,
       receiptNo         : document.getElementById('req_receipt_no').value.trim(),
       count             : document.getElementById('req_count').value,
-      receiptUrl        : receiptUrl,       // ✅ رابط Google Drive بدل base64
-      translatedUrl     : translatedUrl,    // ✅ رابط Google Drive بدل base64
+      receiptUrl        : receiptUrl,       // ✅ قد تكون فارغة إن لم تُرفع صورة أو تأخر الرفع
+      translatedUrl     : translatedUrl,    // ✅ قد تكون فارغة إن لم تُرفع صورة أو تأخر الرفع
       submittedAt       : new Date().toLocaleString('ar-EG'),
     };
 
@@ -987,12 +1002,16 @@ function handleFileSelect(input, previewId, areaId) {
   prev.style.display = 'flex';
   // ✅ إصلاح: استخدام .fp-name بدل span:nth-child(2) الذي كان يفشل
   prev.querySelector('.fp-name').textContent = file.name;
+
+  // ✅ رفع الصورة يبدأ فوراً في الخلفية بصمت — لا يعطّل المستخدم ولا يظهر أي رسالة
+  startBackgroundUpload(file, input.id);
 }
 
 function removeFile(inputId, previewId, areaId) {
   document.getElementById(inputId).value = '';
   document.getElementById(previewId).style.display = 'none';
   document.getElementById(areaId).style.display    = 'block';
+  delete state.uploads[inputId]; // ✅ إلغاء تتبع أي رفع سابق لهذا الحقل
 }
 
 function toBase64(file) {
