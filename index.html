@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>بوابة شئون الخريجين | كلية تكنولوجيا العلوم الصحية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -204,6 +204,100 @@
     .requests-table{font-size:.75rem;}
     .requests-table th,.requests-table td{padding:8px 10px;}
   }
+
+  /* ===== HERO + تعليمات ===== */
+  .welcome-screen{background:radial-gradient(120% 140% at 85% 0%,#1a74b8 0%,#0a3d6b 45%,#06263f 100%);border-radius:28px;padding:56px 24px 44px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);}
+  .welcome-screen::before{content:'';position:absolute;width:420px;height:420px;left:-140px;bottom:-200px;border-radius:50%;background:radial-gradient(circle,rgba(0,180,216,.35),transparent 65%);}
+  .welcome-screen::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 22px);pointer-events:none;}
+  .welcome-screen>*{position:relative;z-index:1;}
+  .welcome-screen h2{color:#fff;font-size:2.1rem;}
+  .welcome-screen>p{color:rgba(255,255,255,.78);}
+  .welcome-screen div[style] p{color:#fff!important;}
+  .welcome-screen .wlc-icon{width:112px;height:112px;margin:0 auto 20px;font-size:54px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--gold));box-shadow:0 0 0 10px rgba(255,255,255,.08),0 0 0 22px rgba(255,255,255,.04);animation:halo 3.2s ease-in-out infinite;}
+  @keyframes halo{50%{box-shadow:0 0 0 16px rgba(233,196,106,.16),0 0 0 34px rgba(233,196,106,.05);}}
+  .open-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:26px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;}
+  .open-chip i{width:8px;height:8px;border-radius:50%;background:#2ecc71;box-shadow:0 0 10px #2ecc71;}
+  .open-chip.closed i{background:var(--gold);box-shadow:0 0 10px var(--gold);}
+  .welcome-screen .lookup-bar{border:none;border-radius:16px;padding:8px 8px 8px 18px;box-shadow:0 14px 40px rgba(0,0,0,.35);margin-bottom:0;}
+  .welcome-screen .lookup-bar .btn{background:linear-gradient(135deg,var(--gold),#f4a261);color:#3a2800;box-shadow:none;padding:13px 22px;}
+  .welcome-screen .lookup-bar .btn:hover{box-shadow:0 8px 22px rgba(233,196,106,.5);}
+  .rules{max-width:780px;margin:0 auto 10px;}
+  .delivery-note{display:flex;gap:16px;align-items:center;background:linear-gradient(120deg,#fff8e1,#fdeeb8);border:1.5px solid var(--gold);border-radius:18px;padding:20px 24px;color:#5c4300;font-weight:700;line-height:1.8;box-shadow:0 10px 30px rgba(233,196,106,.28);margin-bottom:28px;}
+  .delivery-note .dn-icon{font-size:38px;flex-shrink:0;}
+  .delivery-note b{color:#8a2d00;}
+  .rules-title{font-size:1.35rem;font-weight:900;color:var(--primary);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+  .rules-title::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--border));}
+  .rule-list{display:grid;gap:14px;counter-reset:r;}
+  .rule{counter-increment:r;display:flex;gap:16px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px 20px;position:relative;box-shadow:var(--shadow);}
+  .rule::before{content:counter(r);width:46px;height:46px;flex-shrink:0;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:var(--gold);font-weight:900;font-size:1.3rem;display:grid;place-items:center;}
+  .rule:not(:last-child)::after{content:'';position:absolute;right:42px;bottom:-14px;height:14px;border-right:2px dashed var(--border);}
+  .rule h4{font-size:.98rem;font-weight:800;color:var(--text);}
+  .rule p{font-size:.82rem;color:var(--text-muted);margin-top:2px;}
+  .rule .r-emoji{margin-right:auto;font-size:30px;}
+  .ack{display:flex;gap:12px;align-items:flex-start;background:#fff8e1;border:1.5px solid var(--gold);border-radius:12px;padding:14px 16px;font-size:.86rem;line-height:1.8;cursor:pointer;color:#5c4300;}
+  .ack input{width:20px;height:20px;margin-top:4px;accent-color:var(--primary);flex-shrink:0;}
+  .link-btn{background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:12px;padding:2px 10px;margin-right:8px;font-family:inherit;font-size:.72rem;cursor:pointer;}
+  .link-btn:hover{background:rgba(255,255,255,.3);}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  @media(max-width:640px){.welcome-screen h2{font-size:1.5rem;}.delivery-note{flex-direction:column;text-align:center;}.rule .r-emoji{display:none;}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+  /* ===== موبايل ===== */
+  body{padding-bottom:env(safe-area-inset-bottom);-webkit-tap-highlight-color:transparent;}
+  .nav-tabs{position:sticky;top:0;z-index:50;box-shadow:0 4px 18px rgba(6,38,63,.25);}
+  @media(max-width:640px){
+    .header-inner{padding:14px 16px;gap:12px;padding-top:calc(14px + env(safe-area-inset-top));}
+    .logo-circle{width:48px;height:48px;font-size:22px;}
+    .header-text h1{font-size:1rem;}.header-text p{font-size:.72rem;}
+    .header-badge{display:block!important;margin:0;font-size:.7rem;padding:4px 10px;max-width:42vw;}
+    .header-inner{flex-wrap:wrap;}
+    #studentBadge .link-btn{display:block;margin:2px 0 0;}
+    .nav-inner{padding:0;}
+    .nav-tab{flex:1;flex-direction:column;gap:2px;padding:9px 4px;font-size:.7rem;text-align:center;white-space:normal;line-height:1.3;}
+    .main{padding:14px 12px 28px;}
+    .card{padding:18px 14px;border-radius:14px;}
+    .section-header h2{font-size:1.2rem;}
+    .section-header p{margin-right:0;font-size:.82rem;}
+    .welcome-screen{padding:32px 14px 28px;border-radius:20px;}
+    .welcome-screen .wlc-icon{width:84px;height:84px;font-size:40px;}
+    .welcome-screen h2{font-size:1.4rem;}
+    .open-chip{font-size:.72rem;text-align:center;}
+    .lookup-bar{flex-direction:column;align-items:stretch;padding:10px;gap:8px;}
+    .welcome-screen .lookup-bar{padding:10px;}
+    .lookup-bar input{padding:12px 6px;text-align:center;}
+    .lookup-bar .btn{justify-content:center;width:100%;padding:14px;}
+    input,select{font-size:16px!important;min-height:46px;}
+    .btn{min-height:46px;justify-content:center;}
+    .form-actions{flex-direction:column-reverse;}.form-actions .btn{width:100%;}
+    #req-step1 .card>div[style*="text-align:left"] .btn{width:100%;}
+    .requests-grid{gap:10px;}
+    .request-type-card{display:flex;align-items:center;gap:14px;padding:14px;}
+    .rtc-icon{font-size:28px;margin:0;}
+    .step-label{display:none;}.step.active .step-label{display:block;font-size:.75rem;}
+    .step{flex:0 0 auto;}.step-line{margin:0 6px;}
+    #req-step3 div[style*="grid-template-columns"]{grid-template-columns:1fr!important;}
+    .profile-header{flex-wrap:wrap;padding:18px;gap:12px;}
+    .profile-avatar{width:54px;height:54px;font-size:24px;}
+    .profile-status{margin-right:0;}
+    .choice-header h2{font-size:1.3rem;}
+    .choice-card{padding:24px 18px;}
+    .rules-title{font-size:1.1rem;}
+    .rule{padding:14px;gap:12px;}.rule::before{width:38px;height:38px;font-size:1.1rem;}
+    .rule:not(:last-child)::after{right:33px;}
+    .delivery-note{padding:16px;font-size:.88rem;}
+    .toast-container{min-width:0;width:calc(100vw - 24px);top:calc(12px + env(safe-area-inset-top));}
+    .modal-box{padding:22px;}.modal-actions{flex-direction:column-reverse;}.modal-actions .btn{width:100%;}
+    .card-title{flex-wrap:wrap;}
+    /* جدول الطلبات كبطاقات */
+    #historyTableWrap{padding:12px;}
+    .requests-table,.requests-table tbody,.requests-table tr,.requests-table td{display:block;width:100%;}
+    .requests-table thead{display:none;}
+    .requests-table tr{border:1px solid var(--border);border-radius:14px;padding:6px 14px;margin-bottom:12px;background:#fff;box-shadow:var(--shadow);}
+    .requests-table td{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px dashed var(--border)!important;padding:10px 0;font-size:.82rem;text-align:left;}
+    .requests-table td:last-child{border-bottom:none!important;}
+    .requests-table td::before{content:attr(data-label);color:var(--text-muted);font-weight:600;flex-shrink:0;}
+    .requests-table td.c-idx{display:none;}
+  }
 </style>
 </head>
 <body>
@@ -223,7 +317,7 @@
       <h1>كلية تكنولوجيا العلوم الصحية</h1>
       <p>بوابة شئون الخريجين الإلكترونية</p>
     </div>
-    <div class="header-badge" id="studentBadge" style="display:none;"><span id="badgeName">—</span></div>
+    <div class="header-badge" id="studentBadge" style="display:none;"><span id="badgeName">—</span><button class="link-btn" onclick="resetStudent()">تغيير الرقم القومي</button></div>
   </div>
 </div>
 
@@ -245,19 +339,24 @@
         <div class="wlc-icon">🏥</div>
         <h2>مرحباً بك في بوابة الخريجين</h2>
         <p>أدخل رقمك القومي للوصول إلى بياناتك أو إنشاء ملف جديد</p>
+        <div class="open-chip" id="openChip"><i></i><span>—</span></div>
         <div style="max-width:420px;margin:0 auto 40px;">
           <p style="text-align:right;margin-bottom:8px;font-weight:700;color:var(--text);">أدخل رقمك القومي للبدء</p>
           <div class="lookup-bar">
             <input type="text" id="inputNationalId" placeholder="أدخل الرقم القومي (14 رقم)"
                    maxlength="14" oninput="this.value=this.value.replace(/\D/g,'')"
                    onkeydown="if(event.key==='Enter')lookupStudent()">
-            <button class="btn btn-primary" onclick="lookupStudent()"><span>بحث</span> 🔍</button>
+            <button class="btn btn-primary" onclick="lookupStudent()"><span>ابدأ التقديم الآن</span> 🚀</button>
           </div>
         </div>
-        <div class="welcome-features">
-          <div class="wf-card"><div class="wf-icon">📝</div><h4>تسجيل البيانات</h4><p>أدخل بياناتك مرة واحدة فقط</p></div>
-          <div class="wf-card"><div class="wf-icon">🎓</div><h4>طلب الشهادات</h4><p>اطلب شهادة التخرج والوثائق</p></div>
-          <div class="wf-card"><div class="wf-icon">📦</div><h4>تتبع الطلبات</h4><p>تابع حالة طلباتك أولاً بأول</p></div>
+      </div>
+      <div class="rules">
+        <div class="delivery-note"><div class="dn-icon">⏳</div><div>لا يتم تسليم الشهادة إلا بعد مرور <b>3 أيام</b> من تقديم الطلب، وبعد تقديم <b>الإيصال مطبوعاً</b>.</div></div>
+        <div class="rules-title">📌 تعليمات استخراج الشهادات</div>
+        <div class="rule-list">
+          <div class="rule"><div><h4>يتم تقديم الطلب صباحاً حتى الساعة 11</h4><p>الطلبات المقدمة بعد هذا الموعد قد تتأخر إلى اليوم التالي.</p></div><div class="r-emoji">🕚</div></div>
+          <div class="rule"><div><h4>إحضار صور شخصية بخلفية بيضاء</h4><p>أحضر الصور معك عند استلام الشهادة.</p></div><div class="r-emoji">📸</div></div>
+          <div class="rule"><div><h4>الإيصال مطبوع</h4><p>لا يُقبل الإيصال إلا مطبوعاً — احتفظ بنسخة ورقية لتسليمها.</p></div><div class="r-emoji">🧾</div></div>
         </div>
       </div>
     </div>
@@ -358,11 +457,11 @@
     </div>
     <div id="req-form">
       <div class="step-indicator">
-        <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">اختيار الشهادة</div></div>
+        <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">الشهادة</div></div>
         <div class="step-line" id="line1"></div>
         <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">بيانات الطلب</div></div>
         <div class="step-line" id="line2"></div>
-        <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">مراجعة وإرسال</div></div>
+        <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">المراجعة</div></div>
       </div>
 
       <!-- Step 1 -->
@@ -385,6 +484,7 @@
         <div class="card">
           <div class="card-title"><span>📝</span> تفاصيل الطلب</div>
           <div class="info-box"><div class="info-icon">ℹ️</div><div><strong>نوع الطلب: </strong><span id="selectedTypeLabel">—</span></div></div>
+          <div class="info-box" style="background:#fff8e1;border-color:var(--gold);color:#5c4300;"><div class="info-icon">🧾</div><div>يُسلَّم الإيصال <strong>مطبوعاً</strong> مع <strong>صور شخصية بخلفية بيضاء</strong>، ولا يتم التسليم قبل <strong>3 أيام</strong> من تقديم الطلب.</div></div>
           <div class="form-grid">
             <div class="form-group"><label>رقم التسجيل بالإيصال <span class="req">*</span></label><input type="text" id="req_receipt_no" placeholder="رقم الإيصال المدفوع"></div>
             <div class="form-group"><label>عدد النسخ المطلوبة <span class="req">*</span></label><input type="number" id="req_count" min="1" max="10" value="1"></div>
@@ -442,7 +542,8 @@
             <div style="background:var(--surface);border-radius:10px;padding:16px;"><div style="font-size:.75rem;color:var(--text-muted);margin-bottom:4px;">عدد النسخ</div><div style="font-weight:700;" id="review_count">—</div></div>
             <div style="background:var(--surface);border-radius:10px;padding:16px;"><div style="font-size:.75rem;color:var(--text-muted);margin-bottom:4px;">المتقدم</div><div style="font-weight:700;" id="review_student">—</div></div>
           </div>
-          <div class="info-box"><div class="info-icon">⚠️</div><div>بعد إرسال الطلب لا يمكن تعديله. تأكد من صحة جميع البيانات.</div></div>
+          <label class="ack"><input type="checkbox" id="ackRules"><span>أتعهد بإحضار <b>الإيصال مطبوعاً</b> و<b>صور شخصية بخلفية بيضاء</b>، وأعلم أن التسليم لا يتم قبل <b>3 أيام</b> من تقديم الطلب بشكل مباشر.</span></label>
+          <div class="info-box" style="margin-top:16px;"><div class="info-icon">⚠️</div><div>بعد إرسال الطلب لا يمكن تعديله. تأكد من صحة جميع البيانات.</div></div>
           <div class="form-actions">
             <button type="button" class="btn btn-outline" onclick="backToStep2()">← تعديل</button>
             <button type="button" class="btn btn-accent" onclick="submitRequest()" id="submitBtn">📤 إرسال الطلب</button>
@@ -683,10 +784,11 @@ function setFormReadonly(ro) {
     .forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      el.disabled         = ro;
-      el.readOnly         = ro;
-      el.style.background = ro ? '#f0f4f8' : '';
-      el.style.cursor     = ro ? 'not-allowed' : '';
+      const r = ro || id === 'f_national_id';
+      el.disabled         = r;
+      el.readOnly         = r;
+      el.style.background = r ? '#f0f4f8' : '';
+      el.style.cursor     = r ? 'not-allowed' : '';
     });
 }
 
@@ -755,8 +857,11 @@ function validateProfile() {
       if (!el.value.trim()) { el.classList.add('error'); ok = false; }
       else el.classList.remove('error');
     });
-  if (!ok) showToast('يرجى إكمال جميع الحقول المطلوبة', 'error');
-  return ok;
+  if (!ok) { showToast('يرجى إكمال جميع الحقول المطلوبة', 'error'); return false; }
+  const bad = (id, test, msg) => { const el = document.getElementById(id); if (!test(el.value.trim())) { el.classList.add('error'); showToast(msg, 'error'); return true; } return false; };
+  if (bad('f_phone', v => /^01[0125]\d{8}$/.test(v), 'رقم التليفون غير صحيح (11 رقم يبدأ بـ 01)')) return false;
+  if (bad('f_email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'البريد الإلكتروني غير صحيح')) return false;
+  return true;
 }
 
 function closeModal() {
@@ -882,6 +987,7 @@ function waitForUpload(key, maxWaitMs = UPLOAD_GRACE_MS) {
 }
 
 async function submitRequest() {
+  if (!document.getElementById('ackRules').checked) { showToast('يرجى الموافقة على التعهد أولاً', 'error'); return; }
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> جاري الإرسال...';
@@ -945,6 +1051,7 @@ function resetRequestForm() {
   document.querySelectorAll('.request-type-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('req_receipt_no').value = '';
   document.getElementById('req_count').value = '1';
+  document.getElementById('ackRules').checked = false;
   removeFile('receiptFile','receiptPreview','receiptUploadArea');
   removeFile('translatedCertFile','translatedPreview','translatedUploadArea');
   document.getElementById('req-step1').style.display = 'block';
@@ -987,13 +1094,13 @@ async function loadHistory() {
       else if (r.status === 'قيد المعالجة') cls = 'status-processing';
       else if (r.status === 'مرفوض')    cls = 'status-rejected';
       html += `<tr>
-        <td>${i+1}</td>
-        <td><strong>${r.requestType}</strong></td>
-        <td style="font-family:monospace;font-size:.8rem;">${r.requestNumber || '—'}</td>
-        <td>${r.receiptNo}</td>
-        <td>${r.count}</td>
-        <td>${r.submittedAt}</td>
-        <td><span class="status-badge ${cls}">${r.status || 'قيد الانتظار'}</span></td>
+        <td class="c-idx">${i+1}</td>
+        <td data-label="نوع الشهادة"><strong>${esc(r.requestType)}</strong></td>
+        <td data-label="رقم الطلب" style="font-family:monospace;font-size:.8rem;">${esc(r.requestNumber || '—')}</td>
+        <td data-label="رقم الإيصال">${esc(r.receiptNo)}</td>
+        <td data-label="النسخ">${esc(r.count)}</td>
+        <td data-label="تاريخ الطلب">${esc(r.submittedAt)}</td>
+        <td data-label="الحالة"><span class="status-badge ${cls}">${esc(r.status || 'قيد الانتظار')}</span></td>
       </tr>`;
     });
     html += '</tbody></table>';
@@ -1040,11 +1147,35 @@ function toBase64(file) {
   });
 }
 
+function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function resetStudent() {
+  state.nationalId = ''; state.studentData = null; state.isEditing = false; state.cameFromChoice = false;
+  ['section-choice','section-profile'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('section-lookup').style.display = 'block';
+  document.getElementById('studentBadge').style.display = 'none';
+  document.getElementById('inputNationalId').value = '';
+  resetRequestForm(); switchTab('profile');
+}
+
+// حالة التقديم حسب توقيت القاهرة
+(function(){
+  const h = +new Intl.DateTimeFormat('en-GB',{hour:'numeric',hour12:false,timeZone:'Africa/Cairo'}).format(new Date());
+  const chip = document.getElementById('openChip'), open = h < 11;
+  chip.classList.toggle('closed', !open);
+  chip.querySelector('span').textContent = open ? 'التقديم متاح الآن — حتى الساعة 11 صباحاً' : 'انتهى موعد التقديم اليوم — يُرجى التقديم صباحاً حتى الساعة 11';
+})();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
 // Drag & Drop
 document.querySelectorAll('.file-upload-area').forEach(area => {
   area.addEventListener('dragover',  e => { e.preventDefault(); area.classList.add('dragover'); });
   area.addEventListener('dragleave', ()  => area.classList.remove('dragover'));
-  area.addEventListener('drop',      e  => { e.preventDefault(); area.classList.remove('dragover'); });
+  area.addEventListener('drop', e => {
+    e.preventDefault(); area.classList.remove('dragover');
+    const inp = area.querySelector('input[type=file]');
+    if (e.dataTransfer.files.length) { inp.files = e.dataTransfer.files; inp.dispatchEvent(new Event('change')); }
+  });
 });
 </script>
 </body>
